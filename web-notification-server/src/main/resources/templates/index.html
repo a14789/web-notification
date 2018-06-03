@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var ws = new WebSocket("ws://127.0.0.1:8080/message");
+    ws.onopen = function (ev) {
+        console.info("注册客户端");
+        var locations = ['beijing', 'shanghai', 'zhengzhou', 'shenzhen', 'tianjin'];
+        var browsers = ['chrome', 'firefox', 'ie'];
+
+        var register = {
+            userId: "test_" + Math.floor(Math.random() * 10),
+            tags: [locations[Math.floor(Math.random() * locations.length)], browsers[Math.floor(Math.random() * browsers.length)]]
+        };
+        console.log("注册信息：");
+        console.log("\tuserId: " + register.userId);
+        console.log("\ttags: " + register.tags);
+        ws.send(JSON.stringify(register));
+        console.log("注册完成");
+    };
+
+    ws.onclose = function (ev) {
+        console.info("连接关闭: " + ev);
+    };
+
+    ws.onerror = function (ev) {
+        console.info("连接出错: " + ev);
+    };
+
+
+    ws.onmessage = function (ev) {
+        console.info("接受消息: " + ev.data);
+    };
+
+</script>
+</body>
+</html>
